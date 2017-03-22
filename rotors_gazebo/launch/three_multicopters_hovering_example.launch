@@ -20,7 +20,8 @@
       <arg name="enable_logging" value="$(arg enable_logging)" />
       <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
       <arg name="log_file" value="hummingbird"/>
-      <arg name="y" value="0.0"/>
+      <arg name="y" value="-8.0"/>
+      <arg name="x" value="-8.0"/>
     </include>
     <node name="lee_position_controller_node" pkg="rotors_control" type="lee_position_controller_node" output="screen">
       <rosparam command="load" file="$(find rotors_gazebo)/resource/lee_controller_hummingbird.yaml" />
@@ -39,7 +40,8 @@
       <arg name="enable_logging" value="$(arg enable_logging)" />
       <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
       <arg name="log_file" value="pelican"/>
-      <arg name="y" value="1.0"/>
+      <arg name="y" value="-9.0"/>
+      <arg name="x" value="-8.0"/>
     </include>
     <node name="lee_position_controller_node" pkg="rotors_control" type="lee_position_controller_node" output="screen">
       <rosparam command="load" file="$(find rotors_gazebo)/resource/lee_controller_pelican.yaml" />
@@ -58,7 +60,8 @@
       <arg name="enable_logging" value="$(arg enable_logging)" />
       <arg name="enable_ground_truth" value="$(arg enable_ground_truth)" />
       <arg name="log_file" value="firefly"/>
-      <arg name="y" value="2.0"/>
+      <arg name="y" value="-10.0"/>
+      <arg name="x" value="-8.0"/>
     </include>
     <node name="lee_position_controller_node" pkg="rotors_control" type="lee_position_controller_node" output="screen">
       <rosparam command="load" file="$(find rotors_gazebo)/resource/lee_controller_firefly.yaml" />

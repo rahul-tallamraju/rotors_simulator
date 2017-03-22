@@ -34,6 +34,7 @@ struct Axes {
   int roll_direction;
   int pitch_direction;
   int thrust_direction;
+  int yaw;
 };
 
 struct Buttons {

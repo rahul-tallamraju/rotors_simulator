@@ -9,6 +9,7 @@
     <include>
       <uri>model://sun</uri>
     </include>
+    <plugin name="ros_interface_plugin" filename="librotors_gazebo_ros_interface_plugin.so"></plugin>    
     <plugin filename="libRubblePlugin.so" name="rubble">
       <bottom_right>-.5 -1 0.0</bottom_right>
       <top_left>0.5 1.0 0.4</top_left>

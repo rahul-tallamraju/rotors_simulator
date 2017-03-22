@@ -40,6 +40,7 @@ Joy::Joy() {
   pnh.param("axis_roll_", axes_.roll, 0);
   pnh.param("axis_pitch_", axes_.pitch, 1);
   pnh.param("axis_thrust_", axes_.thrust, 2);
+  pnh.param("axis_yaw_", axes_.yaw, 1);
 
   pnh.param("axis_direction_roll", axes_.roll_direction, -1);
   pnh.param("axis_direction_pitch", axes_.pitch_direction, 1);
@@ -48,7 +49,7 @@ Joy::Joy() {
   pnh.param("max_v_xy", max_.v_xy, 1.0);  // [m/s]
   pnh.param("max_roll", max_.roll, 10.0 * M_PI / 180.0);  // [rad]
   pnh.param("max_pitch", max_.pitch, 10.0 * M_PI / 180.0);  // [rad]
-  pnh.param("max_yaw_rate", max_.rate_yaw, 45.0 * M_PI / 180.0);  // [rad/s]
+  pnh.param("max_yaw_rate", max_.rate_yaw, 5 * 45.0 * M_PI / 180.0);  // [rad/s]
   pnh.param("max_thrust", max_.thrust, 30.0);  // [N]
 
   pnh.param("v_yaw_step", v_yaw_step_, 0.05);  // [rad/s]
@@ -80,17 +81,24 @@ void Joy::JoyCallback(const sensor_msgs::JoyConstPtr& msg) {
   control_msg_.roll = msg->axes[axes_.roll] * max_.roll * axes_.roll_direction;
   control_msg_.pitch = msg->axes[axes_.pitch] * max_.pitch * axes_.pitch_direction;
 
-  if (msg->buttons[buttons_.yaw_left]) {
-    current_yaw_vel_ = max_.rate_yaw;
-  }
-  else if (msg->buttons[buttons_.yaw_right]) {
-    current_yaw_vel_ = -max_.rate_yaw;
-  }
-  else {
-    current_yaw_vel_ = 0;
-  }
+//   if (msg->buttons[buttons_.yaw_left]) {
+//     current_yaw_vel_ = max_.rate_yaw;
+//   }
+//   else if (msg->buttons[buttons_.yaw_right]) {
+//     current_yaw_vel_ = -max_.rate_yaw;
+//   }
+//   else {
+//     current_yaw_vel_ = 0;
+//   }
+  
+  //yaw control using the axis on joystick
+  current_yaw_vel_ = max_.rate_yaw * msg->axes[axes_.yaw];
   control_msg_.yaw_rate = current_yaw_vel_;
 
+  
+  
+  
+  
   if (is_fixed_wing_) {
     double thrust = msg->axes[axes_.thrust] * axes_.thrust_direction;
     control_msg_.thrust.x = (thrust >= 0.0) ? thrust : 0.0;
