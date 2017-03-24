@@ -6,8 +6,18 @@
       <background>0.5 0.5 0.5 1</background>
       <shadows>false</shadows>
     </scene>
-    <physics type="ode">
-      <gravity>0 0 -9.81</gravity>
+    <!-- Only require one ROS interface plugin per world, as any other plugin can connect a Gazebo
+        topic to a ROS topic (or vise versa). -->
+    <plugin name="ros_interface_plugin" filename="librotors_gazebo_ros_interface_plugin.so"></plugin>
+    
+    <spherical_coordinates>
+      <surface_model>EARTH_WGS84</surface_model>
+      <latitude_deg>47.3667</latitude_deg>
+      <longitude_deg>8.5500</longitude_deg>
+      <elevation>500.0</elevation>
+      <heading_deg>0</heading_deg>
+    </spherical_coordinates>
+    <physics type='ode'>
       <ode>
         <solver>
           <type>quick</type>
@@ -15,15 +25,16 @@
           <sor>1.3</sor>
         </solver>
         <constraints>
-          <cfm>0.0</cfm>
+          <cfm>0</cfm>
           <erp>0.2</erp>
-          <contact_max_correcting_vel>100.0</contact_max_correcting_vel>
+          <contact_max_correcting_vel>100</contact_max_correcting_vel>
           <contact_surface_layer>0.001</contact_surface_layer>
         </constraints>
       </ode>
-      <real_time_update_rate>120</real_time_update_rate>
+      <max_step_size>0.01</max_step_size>
       <real_time_factor>1</real_time_factor>
-      <max_step_size>0.008333</max_step_size>
+      <real_time_update_rate>100</real_time_update_rate>
+      <gravity>0 0 -9.8</gravity>
     </physics>
     <light name="directional_light_1" type="directional">
       <cast_shadows>false</cast_shadows>
@@ -155,6 +166,11 @@
       </attenuation>
       <direction>0.1 0.1 -1.0</direction>
     </light>
+    <include>
+      <name>mpi</name>
+      <pose>0.0 0.0 0.0  0.0 0.0 0.0</pose>
+      <uri>model://mpi</uri>
+    </include>    
     <include>
       <name>wall_stand.993</name>
       <pose>2.0 4.19950008392334 0.03449999913573265  0.0 0.0 0.0</pose>

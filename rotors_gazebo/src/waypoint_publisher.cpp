@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
   
   ros::Subscriber subNMPCwaypoint_ = nh.subscribe("/waypoint_firefly_"+args.at(1), 1000, wayPointCallback); 
   
-  ros::Subscriber subSelfPose_ = nh.subscribe("firefly_"+args.at(1)+"/ground_truth/pose_with_covariance", 1000, selfPoseCallback);   
+  ros::Subscriber subSelfPose_ = nh.subscribe("/firefly_"+args.at(1)+"/ground_truth/pose_with_covariance", 1000, selfPoseCallback);   
   
   double delay;
 
@@ -88,6 +88,7 @@ int main(int argc, char** argv) {
   }
 
   const float DEG_2_RAD = M_PI / 180.0;
+  const float takeOffHeight = 2.5; //in meter
 
   trajectory_msgs::MultiDOFJointTrajectory trajectory_msg;
   trajectory_msg.header.stamp = ros::Time::now();
@@ -101,26 +102,33 @@ int main(int argc, char** argv) {
     ROS_INFO("There is no subscriber available, trying again in 1 second.");
     ros::Duration(1.0).sleep();
   }
-  
 
-  
-  /**
-   * A count of how many messages we have sent. This is used to create
-   * a unique string for each message.
-   */
+  ros::Time takeOffStartTime = ros::Time::now();
   ros::Rate loop_rate(100);
   while (ros::ok())
   {
-    Eigen::Vector3d desired_position(waypoint[0],waypoint[1],waypoint[2]);
-
-    //double desired_yaw = std::stof(args.at(4)) * DEG_2_RAD;
-    double desired_yaw = atan2(poi[1]-currentPosition[1],poi[0]-currentPosition[0]);
-    mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
-        desired_yaw, &trajectory_msg);      
-      
-    //ROS_INFO("Publishing waypoint on namespace %s: [%f, %f, %f].",nh.getNamespace().c_str(),desired_position.x(),desired_position.y(),desired_position.z());
     
-    trajectory_pub.publish(trajectory_msg);
+    if((ros::Time::now() - takeOffStartTime).toSec() < 10.0)  //perform takeoff
+    {
+        Eigen::Vector3d desired_position(currentPosition[0],currentPosition[1],takeOffHeight);
+        double desired_yaw = atan2(poi[1]-currentPosition[1],poi[0]-currentPosition[0]);
+        mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
+            desired_yaw, &trajectory_msg);      
+        //ROS_INFO("Publishing waypoint on namespace %s: [%f, %f, %f].",nh.getNamespace().c_str(),desired_position.x(),desired_position.y(),desired_position.z());
+        trajectory_pub.publish(trajectory_msg);    
+    }
+    else
+    {
+        
+        Eigen::Vector3d desired_position(waypoint[0],waypoint[1],waypoint[2]);
+        double desired_yaw = atan2(poi[1]-currentPosition[1],poi[0]-currentPosition[0]);
+        mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
+            desired_yaw, &trajectory_msg);      
+        
+        //ROS_INFO("Publishing waypoint on namespace %s: [%f, %f, %f].",nh.getNamespace().c_str(),desired_position.x(),desired_position.y(),desired_position.z());
+        
+        trajectory_pub.publish(trajectory_msg);
+    }
 
     ros::spinOnce();
     loop_rate.sleep();
