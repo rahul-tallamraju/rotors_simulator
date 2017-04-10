@@ -121,7 +121,14 @@ int main(int argc, char** argv) {
     {
         
         Eigen::Vector3d desired_position(waypoint[0],waypoint[1],waypoint[2]);
-        double desired_yaw = atan2(poi[1]-currentPosition[1],poi[0]-currentPosition[0]);
+
+        double desired_yaw;
+
+        if(fabs(0-currentPosition[0])>0.01)
+            desired_yaw = atan2(0-currentPosition[1],0-currentPosition[0]);
+        else
+            desired_yaw = atan2(0-currentPosition[1],0.01);
+        
         mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
             desired_yaw, &trajectory_msg);      
         
