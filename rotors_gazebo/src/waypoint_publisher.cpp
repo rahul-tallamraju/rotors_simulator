@@ -18,6 +18,7 @@
  * limitations under the License.
  */
 
+#define M_2PI 6.28
 #include <fstream>
 #include <iostream>
 
@@ -32,9 +33,12 @@
 #include <boost/ref.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
+#include <tf/transform_datatypes.h>
 
-
-double waypoint[3], poi[3], currentPosition[3];
+double waypoint[3], poi[3], currentPosition[3]; double roll, pitch, currentYaw;
+double desired_yaw;
+double yawRateGain = 0.5;
+double MaxYawRate = 0.1;
 
 void wayPointCallback(const uav_msgs::uav_pose::ConstPtr& msg)
 {
@@ -53,9 +57,25 @@ void selfPoseCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& 
     currentPosition[0] = msg->pose.pose.position.x;
     currentPosition[1] = msg->pose.pose.position.y;
     currentPosition[2] = msg->pose.pose.position.z;
-
+    
+    tf::Quaternion q(msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
+    tf::Matrix3x3 m(q);
+    m.getRPY(roll, pitch, currentYaw);
+    //std::cout << "Roll: " << roll << ", Pitch: " << pitch << ", Yaw: " << yaw << std::endl;
+    
     
 }
+
+	static inline double normPi(double a) {
+		if (a > M_PI || a <= -M_PI) {
+			a = fmod(a, M_2PI); //in [-2*M_PI,2*M_PI]
+			if (a < -M_PI)
+                                a += M_2PI;
+			if (a > M_PI)
+				a -= M_2PI;
+		}
+		return a;
+	}
 
 int main(int argc, char** argv) {
 
@@ -66,9 +86,13 @@ int main(int argc, char** argv) {
       mav_msgs::default_topics::COMMAND_TRAJECTORY, 10);
 
   ROS_INFO("Started waypoint_publisher.");
+  
+  
 
   ros::V_string args;
   ros::removeROSArgs(argc, argv, args);
+  
+  int selfID = atoi(argv[1]);
   
   ros::Subscriber subNMPCwaypoint_ = nh.subscribe("/waypoint_firefly_"+args.at(1), 1000, wayPointCallback); 
   
@@ -112,6 +136,7 @@ int main(int argc, char** argv) {
     {
         Eigen::Vector3d desired_position(currentPosition[0],currentPosition[1],takeOffHeight);
         double desired_yaw = atan2(poi[1]-currentPosition[1],poi[0]-currentPosition[0]);
+        desired_yaw = 0.0;
         mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
             desired_yaw, &trajectory_msg);      
         //ROS_INFO("Publishing waypoint on namespace %s: [%f, %f, %f].",nh.getNamespace().c_str(),desired_position.x(),desired_position.y(),desired_position.z());
@@ -121,14 +146,18 @@ int main(int argc, char** argv) {
     {
         
         Eigen::Vector3d desired_position(waypoint[0],waypoint[1],waypoint[2]);
+     
+        desired_yaw = atan2(poi[1]-currentPosition[1],poi[0]-currentPosition[0]);
 
-        double desired_yaw;
-
-        if(fabs(0-currentPosition[0])>0.01)
-            desired_yaw = atan2(0-currentPosition[1],0-currentPosition[0]);
-        else
-            desired_yaw = atan2(0-currentPosition[1],0.01);
         
+        double desiredYawRate = yawRateGain*(normPi(desired_yaw - currentYaw));
+        if (fabs(desiredYawRate) > MaxYawRate) {
+            desiredYawRate = copysign(MaxYawRate, desiredYawRate);
+        }        
+        
+        //if(selfID == 1)
+          //  std::cout<<"desiredYawRate for robot "<< selfID  <<"  = " <<desiredYawRate<<std::endl;
+
         mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
             desired_yaw, &trajectory_msg);      
         
