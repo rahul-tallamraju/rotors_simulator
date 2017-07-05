@@ -126,7 +126,6 @@ if (NOT NO_ROS)
     rotors_control
     std_srvs
     tf
-    yaml_cpp_catkin
   )
 endif()
 
@@ -136,10 +135,12 @@ message(STATUS "CMAKE_BINARY_DIR = ${CMAKE_BINARY_DIR}")
 find_package(Eigen REQUIRED)
 find_package(gazebo REQUIRED)
 find_package(OpenCV REQUIRED)
+find_package(Glog REQUIRED)
 link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(${GAZEBO_INCLUDE_DIRS})
 include_directories(${OpenCV_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
 
 # if (BUILD_MAVLINK_INTERFACE_PLUGIN)
 #   include_directories(${mavros_msgs_INCLUDE_DIRS})
@@ -150,10 +151,8 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 # =================== YAML_CPP ================= #
 # ============================================== #
 
-if (NO_ROS)
-  find_package(YamlCpp REQUIRED)
-  include_directories(${YAML_CPP_INCLUDE_DIR})
-endif()
+find_package(YamlCpp REQUIRED)
+include_directories(${YAML_CPP_INCLUDE_DIR})
 
 # ============================================== #
 # =================== PROTOBUF ================= #
@@ -209,9 +208,9 @@ link_libraries(mav_msgs)
 
 if (NOT NO_ROS)
   catkin_package(
-    INCLUDE_DIRS include ${Eigen_INCLUDE_DIRS} ${CATKIN_DEVEL_PREFIX}/include/${PACKAGE_NAME}
+    INCLUDE_DIRS include ${Eigen_INCLUDE_DIRS}
     LIBRARIES rotors_gazebo_motor_model rotors_gazebo_controller_interface
-    CATKIN_DEPENDS cv_bridge geometry_msgs mav_msgs octomap_msgs octomap_ros rosbag roscpp rotors_comm rotors_control std_srvs tf yaml_cpp_catkin
+    CATKIN_DEPENDS cv_bridge geometry_msgs mav_msgs octomap_msgs octomap_ros rosbag roscpp rotors_comm rotors_control std_srvs tf
     DEPENDS eigen gazebo octomap opencv
     #CFG_EXTRAS rotors_gazebo_plugins.cmake
   )
@@ -319,16 +318,16 @@ if (BUILD_MAVLINK_INTERFACE_PLUGIN)
 
   # We need the MAVLink headers.
   set(MAVLINK_HEADERS_FOUND FALSE)
-  
+
   # First, check to see if MAVLink headers were passed in as variable
   if(NOT ${MAVLINK_HEADER_DIR} STREQUAL "")
-  
+
     message(STATUS "MAVLINK_HEADER_DIR provided as '${MAVLINK_HEADER_DIR}'.")
     include_directories(${MAVLINK_HEADER_DIR})
     set(MAVLINK_HEADERS_FOUND TRUE)
-    
+
   else()
-  
+
     message(STATUS "MAVLINK_HEADER_DIR not provided, falling back to looking at default paths...")
     # If ROS indigo is installed, we should be able to find them at the path below
     if(EXISTS /opt/ros/indigo/include/mavlink/v1.0/)
@@ -336,9 +335,9 @@ if (BUILD_MAVLINK_INTERFACE_PLUGIN)
       include_directories("/opt/ros/indigo/include/mavlink/v1.0/")
       set(MAVLINK_HEADERS_FOUND TRUE)
     endif()
-    
+
   endif()
-  
+
   if(NOT MAVLINK_HEADERS_FOUND)
     message(FATAL_ERROR "MAVLink headers were not found. They are required for building MavlinkInterfacePlugin.")
   endif()
@@ -418,6 +417,14 @@ if(BUILD_OPTICAL_FLOW_PLUGIN)
   list(APPEND targets_to_install rotors_gazebo_optical_flow_plugin)
 endif()
 
+#======================================= PRESSURE PLUGIN ========================================//
+add_library(rotors_gazebo_pressure_plugin SHARED src/gazebo_pressure_plugin.cpp)
+target_link_libraries(rotors_gazebo_pressure_plugin ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} ${GLOG_LIBRARIES})
+if (NOT NO_ROS)
+  add_dependencies(rotors_gazebo_pressure_plugin ${catkin_EXPORTED_TARGETS})
+endif()
+list(APPEND targets_to_install rotors_gazebo_pressure_plugin)
+
 #===================================== ROS INTERFACE PLUGIN =====================================//
 # This entire plugin is only built if ROS is a dependency
 if (NOT NO_ROS)
@@ -475,11 +482,5 @@ install(
   DESTINATION ${BIN_DESTINATION}
   LIBRARY DESTINATION ${LIB_DESTINATION}
 )
-
-# Copy over all converted protobuf files (*.pb.h and *.pb.c) from the src directory to
-# the devel directory. This is required so that you can include the protobuf header files from other C++ files.
-if (NOT NO_ROS)
-  file(COPY ${CMAKE_CURRENT_BINARY_DIR}/ DESTINATION ${CATKIN_DEVEL_PREFIX}/include/${PACKAGE_NAME} FILES_MATCHING PATTERN "*.pb.*")
-endif()
 
 #message(FATAL_ERROR "Reached EOF.")
