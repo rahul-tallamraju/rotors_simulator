@@ -43,9 +43,9 @@
       <rosparam command="load" file="$(find rotors_gazebo)/resource/firefly.yaml" />
       <remap from="odometry" to="/$(arg mav_name)_$(arg roboID)/odometry_sensor1/odometry" />
     </node>
-    <node name="robot_state_publisher_mavs" pkg="robot_state_publisher" type="robot_state_publisher" />
-    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
-    <node name="waypoint_publisher" pkg="rotors_gazebo" type="waypoint_publisher" output="screen" args="$(arg roboID) -9 2 0 5"/>    
+    <node name="robot_state_publisher_mavs_$(arg roboID)" pkg="robot_state_publisher" type="robot_state_publisher" />
+    <node name="joint_state_publisher_$(arg roboID)" pkg="joint_state_publisher" type="joint_state_publisher" />
+    <node name="waypoint_publisher_$(arg roboID)" pkg="rotors_gazebo" type="waypoint_publisher" output="screen" args="$(arg roboID) -9 2 0 5"/>    
   </group>
   
 </launch>

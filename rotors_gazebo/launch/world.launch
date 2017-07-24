@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <launch>
   <arg name="mav_name" default="firefly"/>
-  <arg name="world_name" default="basic"/>
+  <arg name="world_name" default="arena_HKT_4"/>
   <arg name="enable_logging" default="false" />
   <arg name="enable_ground_truth" default="true" />
   <arg name="log_file" default="$(arg mav_name)" />
