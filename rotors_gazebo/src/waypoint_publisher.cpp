@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
   while (ros::ok())
   {
     
-    if((ros::Time::now() - takeOffStartTime).toSec() < 100.0)  //perform takeoff
+    if((ros::Time::now() - takeOffStartTime).toSec() < 10.0)  //perform takeoff
     {
         Eigen::Vector3d desired_position(firstPosition[0],firstPosition[1],takeOffHeight);
         double desired_yaw = atan2(poi[1]-firstPosition[1],poi[0]-firstPosition[0]);
@@ -161,11 +161,17 @@ int main(int argc, char** argv) {
             desiredYawRate = copysign(MaxYawRate, desiredYawRate);
         }        
         
-        //if(selfID == 1)
-          //  std::cout<<"desiredYawRate for robot "<< selfID  <<"  = " <<desiredYawRate<<std::endl;
+//         if(selfID == 1)
+//         {
+//             std::cout<<"desiredYawRate for robot "<< selfID  <<"  = " <<desiredYawRate<<std::endl;
+//             std::cout<<"desired_yaw for robot "<< selfID  <<"  = " <<desired_yaw<<std::endl;
+//         }
 
+        
+        /*mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
+            desired_yaw, &trajectory_msg);*/   
         mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
-            desired_yaw, &trajectory_msg);      
+            0, &trajectory_msg);
         
         //ROS_INFO("Publishing waypoint on namespace %s: [%f, %f, %f].",nh.getNamespace().c_str(),desired_position.x(),desired_position.y(),desired_position.z());
         
