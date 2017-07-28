@@ -153,7 +153,7 @@ int main(int argc, char** argv) {
         
         Eigen::Vector3d desired_position(waypoint[0],waypoint[1],waypoint[2]);
      
-        desired_yaw = atan2(poi[1]-currentPosition[1],poi[0]-currentPosition[0]);
+        desired_yaw = atan2(poi[1]-waypoint[1],poi[0]-waypoint[0]);
 
         
         double desiredYawRate = yawRateGain*(normPi(desired_yaw - currentYaw));
@@ -171,7 +171,7 @@ int main(int argc, char** argv) {
         /*mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
             desired_yaw, &trajectory_msg);*/   
         mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
-            0, &trajectory_msg);
+            desired_yaw, &trajectory_msg);
         
         //ROS_INFO("Publishing waypoint on namespace %s: [%f, %f, %f].",nh.getNamespace().c_str(),desired_position.x(),desired_position.y(),desired_position.z());
         
