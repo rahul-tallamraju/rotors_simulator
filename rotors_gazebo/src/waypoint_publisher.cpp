@@ -154,6 +154,7 @@ int main(int argc, char** argv) {
         Eigen::Vector3d desired_position(waypoint[0],waypoint[1],waypoint[2]);
      
         desired_yaw = atan2(poi[1]-waypoint[1],poi[0]-waypoint[0]);
+    
 
         
         double desiredYawRate = yawRateGain*(normPi(desired_yaw - currentYaw));
@@ -161,10 +162,18 @@ int main(int argc, char** argv) {
             desiredYawRate = copysign(MaxYawRate, desiredYawRate);
         }        
         
+        double diffYaw = (desired_yaw - currentYaw);
+        diffYaw = normPi(diffYaw);
+        
+        if(diffYaw>=M_PI/2)
+            desired_yaw = desired_yaw - M_PI/4;
+        if(diffYaw<=-M_PI/2)
+            desired_yaw = desired_yaw + M_PI/4;
+        
 //         if(selfID == 1)
 //         {
-//             std::cout<<"desiredYawRate for robot "<< selfID  <<"  = " <<desiredYawRate<<std::endl;
-//             std::cout<<"desired_yaw for robot "<< selfID  <<"  = " <<desired_yaw<<std::endl;
+//             std::cout<<"desired_yaw - currentYaw for robot "<< selfID  <<"  = " <<desired_yaw - currentYaw<<std::endl;
+//             //std::cout<<"desired_yaw for robot "<< selfID  <<"  = " <<desired_yaw<<std::endl;
 //         }
 
         
