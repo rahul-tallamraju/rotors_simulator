@@ -1,7 +1,7 @@
 # Optional arguments to be passed into file
 # ADDITIONAL_INCLUDE_DIRS           string  Additional include directories to add to every build target (PX4 uses this).
 # BUILD_MAVLINK_INTERFACE_PLUGIN    bool    Build mavlink_interface_plugin (requires mav dependency).
-# BUILD_OCTOMAP_PLUGIN              bool    Build the optical map plugin (requires Octomap).
+#BUILD_OCTOMAP_PLUGIN              bool    #Build the optical map plugin (requires Octomap).
 # BUILD_OPTICAL_FLOW_PLUGIN         bool    Build the optical flow plugin (requires OpenCV).
 # MAVLINK_HEADER_DIR                string  Location of MAVLink header files. If not provided, this CMakeLists.txt file will
 #                                               search the default locations (e.g. ROS) for them. This variable is only required
@@ -16,7 +16,7 @@ project(rotors_gazebo_plugins)
 #endif()
 
 #message(STATUS "rotors_gazebo_plugins CMakeLists.txt called.")
-
+set(BUILD_OCTOMAP_PLUGIN TRUE)
 
 # =============================================================================================== #
 # ========================== SET DEFAULTS FOR PASSED-IN VARIABLES =============================== #

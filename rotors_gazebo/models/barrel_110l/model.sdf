@@ -8,21 +8,23 @@
         <collision name="collision">
           <geometry>
             <mesh>
-              <uri>model://barrel_110l/meshes/barrel_110l.dae</uri> 
-              <scale>1 1 1</scale>
+              <uri>model://barrel_110l/meshes/barrel_110l.dae</uri>
+              <scale>1 1 15</scale>
+              <!-- <scale>1 1 1</scale> -->
             </mesh>
           </geometry>
         </collision>
         <visual name="visual">
           <geometry>
             <mesh>
-              <uri>model://barrel_110l/meshes/barrel_110l.dae</uri> 
-              <scale>1 1 1</scale>
+              <uri>model://barrel_110l/meshes/barrel_110l.dae</uri>
+              <scale>1 1 15</scale>
+              <!-- <scale>1 1 1</scale> -->
             </mesh>
           </geometry>
 	  <material>
             <script>
-              <uri>model://barrel_110l/textures/barrel_110l.jpg</uri> 
+              <uri>model://barrel_110l/textures/barrel_110l.jpg</uri>
             </script>
           </material>
         </visual>
