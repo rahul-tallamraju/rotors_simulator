@@ -53,7 +53,7 @@
       <uri>model://yosemite</uri>
     </include>
 
-    <!-- <include>
+    <include>
       <name>barrel_110l</name>
       <pose>-14 -7 0.0  0.0 0.0 0.0</pose>
       <uri>model://pine_tree</uri>
@@ -117,7 +117,7 @@
       <name>barrel_110l.008</name>
       <pose>-5 -7 0.0  0.0 0.0 0.0</pose>
       <uri>model://pine_tree</uri>
-    </include> -->
+    </include>
 
 
   </world>
