@@ -27,13 +27,14 @@
 #include <mav_msgs/default_topics.h>
 #include <ros/ros.h>
 #include <trajectory_msgs/MultiDOFJointTrajectory.h>
-#include <uav_msgs/uav_pose.h>
 #include <geometry_msgs/PoseWithCovarianceStamped.h>
 #include <boost/bind.hpp>
 #include <boost/ref.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/mutex.hpp>
 #include <tf/transform_datatypes.h>
+
+#include <uav_msgs/uav_pose.h>
 
 double waypoint[3], poi[3], firstPosition[3], currentPosition[3]; double roll, pitch, currentYaw;
 double desired_yaw;
