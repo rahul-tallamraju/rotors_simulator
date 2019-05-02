@@ -1,6 +1,23 @@
 RotorS
 ===============
 
+Rahul's Gazebo 9 additions:
+
+New environments arena_RAL and arena_ICRA added.
+1. To run simulation with the actor plugin and the terrain map, run arena_RAL using the following command.
+```
+$ roslaunch rotors_gazebo world.launch world_name:=arena_RAL
+```
+2. To run simulation without actor plugin and terrain information run arena_ICRA using the following command.
+```
+$ roslaunch rotors_gazebo world.launch world_name:=arena_ICRA
+```
+3. The latest actor plugin which is compatible with Gazebo 9  is currently available only on the private repo : https://gitlab.tuebingen.mpg.de/aahmad/MAVOCAP/tree/act_track_experimental_rahul
+
+===============
+
+
+
 RotorS is a MAV gazebo simulator.
 It provides some multirotor models such as the [AscTec Hummingbird](http://www.asctec.de/en/uav-uas-drone-products/asctec-hummingbird/), the [AscTec Pelican](http://www.asctec.de/en/uav-uas-drone-products/asctec-pelican/), or the [AscTec Firefly](http://www.asctec.de/en/uav-uas-drone-products/asctec-firefly/), but the simulator is not limited for the use with these multicopters.
 
