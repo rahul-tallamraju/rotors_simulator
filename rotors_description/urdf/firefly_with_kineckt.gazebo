@@ -32,14 +32,12 @@
     enable_ground_truth="true">
     <origin xyz="0.1 0.0 -0.03" rpy="0.0 0.1 0.0" />
   </xacro:vi_sensor_macro>-->
-  
-  
+
+<xacro:include filename="$(find rotors_description)/urdf/asus_camera.urdf.xacro" />
   <xacro:asus_camera
     name="xtion"
     parent="${namespace}/base_link">
     <origin xyz="0.18 0.0 0.07" rpy="0 0.7853 0"/>
   </xacro:asus_camera>
-<xacro:include filename="$(find rotors_description)/urdf/asus_camera.urdf.xacro" />    
-  
-</robot>
 
+</robot>

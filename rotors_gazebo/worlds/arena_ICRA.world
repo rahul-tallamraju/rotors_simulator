@@ -8,7 +8,6 @@
       <shadows>false</shadows>
     </scene>
     <plugin name="ros_interface_plugin" filename="librotors_gazebo_ros_interface_plugin.so"></plugin>
-    <plugin name='gazebo_octomap' filename='librotors_gazebo_octomap_plugin.so'></plugin>
     <gui>
       <camera name="user_camera">
         <pose>0 0 30 0 1.57 1.57</pose>
@@ -48,9 +47,9 @@
 
 
     <include>
-      <!-- <uri>model://custom_ground_plane</uri> -->
+      <uri>model://custom_ground_plane</uri>
       <!-- <uri>model://asphalt_plane</uri> -->
-      <uri>model://yosemite</uri>
+      <!-- <uri>model://yosemite</uri> -->
     </include>
 
     <include>
