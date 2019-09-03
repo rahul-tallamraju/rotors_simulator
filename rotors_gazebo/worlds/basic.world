@@ -38,5 +38,26 @@
       <real_time_update_rate>100</real_time_update_rate>
       <gravity>0 0 -9.8</gravity>
     </physics>
+    <!-- <actor name="actor">
+    <pose>0 0 0 0 0 0</pose>
+    <skin>
+      <filename>walk.dae</filename>
+    </skin>
+    <animation name="walking">
+      <filename>walk.dae</filename>
+      <interpolate_x>true</interpolate_x>
+    </animation>
+
+    <plugin name="actor1_plugin" filename="libactor_custom.so">
+      <target>0 -5 1.2138</target>
+      <target_weight>1.15</target_weight>
+      <obstacle_weight>1.8</obstacle_weight>
+      <animation_factor>5.1</animation_factor>
+      <ignore_obstacles>
+        <model>ground_texture</model>
+        <model>ground_plane</model>
+      </ignore_obstacles>
+    </plugin>
+  </actor> -->
   </world>
 </sdf>

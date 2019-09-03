@@ -16,12 +16,12 @@
       <filename>walk.dae</filename>
     </skin>
     <animation name="walking">
-      <filename>walk.dae</filename>
+      <filename>run.dae</filename>
       <interpolate_x>true</interpolate_x>
     </animation>
 
     <plugin name="actor1_plugin" filename="libactor_custom.so">
-      <target>0 8 1.2138</target>
+      <target>0 -5 1.2138</target>
       <target_weight>1.15</target_weight>
       <obstacle_weight>1.8</obstacle_weight>
       <animation_factor>5.1</animation_factor>
@@ -78,74 +78,9 @@
     </include>
 
     <include>
-       <uri>model://ground_plane</uri>
-    </include>
-
-    <!-- <include>
       <name>barrel_110l</name>
       <pose>-14 -7 0.0  0.0 0.0 0.0</pose>
       <uri>model://pine_tree</uri>
     </include>
-    <include>
-      <name>barrel_110l_n</name>
-      <pose>-15 -3.5 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l_d</name>
-      <pose>13 -3 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l_nd</name>
-      <pose>13 3 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l.001</name>
-      <pose>-12 6 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l.001_n</name>
-      <pose>-10 10 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l.003</name>
-      <pose>-2 9 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l.003_n</name>
-      <pose>3 9.5 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l.004</name>
-      <pose>4 -9 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l.004_n</name>
-      <pose>8 -9 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l.006</name>
-      <pose>12 10 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l.007</name>
-      <pose>0  5 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include>
-    <include>
-      <name>barrel_110l.008</name>
-      <pose>-5 -7 0.0  0.0 0.0 0.0</pose>
-      <uri>model://pine_tree</uri>
-    </include> -->
-
   </world>
 </sdf>

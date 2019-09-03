@@ -47,11 +47,15 @@ void wayPointCallback(const uav_msgs::uav_pose::ConstPtr& msg)
     waypoint[0] = msg->position.x;
     waypoint[1] = -msg->position.y;
     waypoint[2] = -msg->position.z;
-    
+
+    ROS_INFO("Waypoint : x:%f, y:%f, z:%f", waypoint[0],  waypoint[1],  waypoint[2]);
+
     poi[0] = msg->POI.x;
     poi[1] = -msg->POI.y;
     poi[2] = -msg->POI.z;
-    
+    // poi[0] = 1;
+    // poi[1] = 0;
+    // poi[2] = 0;
 }
 
 void selfPoseCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& msg)
@@ -60,19 +64,19 @@ void selfPoseCallback(const geometry_msgs::PoseWithCovarianceStamped::ConstPtr& 
     {
         firstPosition[0] = msg->pose.pose.position.x;
         firstPosition[1] = msg->pose.pose.position.y;
-        firstPosition[2] = msg->pose.pose.position.z;   
+        firstPosition[2] = msg->pose.pose.position.z;
         firstTimePositionCallback = false;
     }
     currentPosition[0] = msg->pose.pose.position.x;
     currentPosition[1] = msg->pose.pose.position.y;
     currentPosition[2] = msg->pose.pose.position.z;
-    
+
     tf::Quaternion q(msg->pose.pose.orientation.x, msg->pose.pose.orientation.y, msg->pose.pose.orientation.z, msg->pose.pose.orientation.w);
     tf::Matrix3x3 m(q);
     m.getRPY(roll, pitch, currentYaw);
     //std::cout << "Roll: " << roll << ", Pitch: " << pitch << ", Yaw: " << yaw << std::endl;
-    
-    
+
+
 }
 
 	static inline double normPi(double a) {
@@ -94,18 +98,18 @@ int main(int argc, char** argv) {
       mav_msgs::default_topics::COMMAND_TRAJECTORY, 10);
 
   ROS_INFO("Started waypoint_publisher.");
-  
-  
+
+
 
   ros::V_string args;
   ros::removeROSArgs(argc, argv, args);
-  
+
   int selfID = atoi(argv[1]);
-  
-  ros::Subscriber subNMPCwaypoint_ = nh.subscribe("/waypoint_firefly_"+args.at(1), 1000, wayPointCallback); 
-  
-  ros::Subscriber subSelfPose_ = nh.subscribe("/firefly_"+args.at(1)+"/ground_truth/pose_with_covariance", 1000, selfPoseCallback);   
-  
+
+  ros::Subscriber subNMPCwaypoint_ = nh.subscribe("/waypoint_firefly_"+args.at(1), 1000, wayPointCallback);
+
+  ros::Subscriber subSelfPose_ = nh.subscribe("/firefly_"+args.at(1)+"/ground_truth/pose_with_covariance", 1000, selfPoseCallback);
+
   double delay;
 
   if (args.size() == 5) {
@@ -138,67 +142,67 @@ int main(int argc, char** argv) {
   ros::Rate loop_rate(100);
   while (ros::ok())
   {
-    
+
     if((ros::Time::now() - takeOffStartTime).toSec() < 10.0)  //perform takeoff
     {
         Eigen::Vector3d desired_position(firstPosition[0],firstPosition[1],takeOffHeight);
         double desired_yaw = atan2(poi[1]-firstPosition[1],poi[0]-firstPosition[0]);
         desired_yaw = 0.0;
         mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
-            desired_yaw, &trajectory_msg);      
+            desired_yaw, &trajectory_msg);
         //ROS_INFO("Publishing waypoint on namespace %s: [%f, %f, %f].",nh.getNamespace().c_str(),desired_position.x(),desired_position.y(),desired_position.z());
-        trajectory_pub.publish(trajectory_msg);    
+        trajectory_pub.publish(trajectory_msg);
     }
     else
     {
-        
-        Eigen::Vector3d desired_position(waypoint[0],waypoint[1],waypoint[2]);
-     
-        desired_yaw = atan2(poi[1]-waypoint[1],poi[0]-waypoint[0]);
-    
 
-        
+        Eigen::Vector3d desired_position(waypoint[0],waypoint[1],waypoint[2]);
+
+        desired_yaw = atan2(poi[1]-waypoint[1],poi[0]-waypoint[0]);
+
+
+
         double desiredYawRate = yawRateGain*(normPi(desired_yaw - currentYaw));
         if (fabs(desiredYawRate) > MaxYawRate) {
             desiredYawRate = copysign(MaxYawRate, desiredYawRate);
-        }        
-        
+        }
+
         double diffYaw = (desired_yaw - currentYaw);
         diffYaw = normPi(diffYaw);
-        
+
         if(diffYaw>=M_PI/2)
             desired_yaw = desired_yaw - M_PI/4;
         if(diffYaw<=-M_PI/2)
             desired_yaw = desired_yaw + M_PI/4;
-        
+
 //         if(selfID == 1)
 //         {
 //             std::cout<<"desired_yaw - currentYaw for robot "<< selfID  <<"  = " <<desired_yaw - currentYaw<<std::endl;
 //             //std::cout<<"desired_yaw for robot "<< selfID  <<"  = " <<desired_yaw<<std::endl;
 //         }
 
-        
+
         /*mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
-            desired_yaw, &trajectory_msg);*/   
+            desired_yaw, &trajectory_msg);*/
         mav_msgs::msgMultiDofJointTrajectoryFromPositionYaw(desired_position,
             desired_yaw, &trajectory_msg);
-        
+
         //ROS_INFO("Publishing waypoint on namespace %s: [%f, %f, %f].",nh.getNamespace().c_str(),desired_position.x(),desired_position.y(),desired_position.z());
-        
+
         trajectory_pub.publish(trajectory_msg);
     }
 
     ros::spinOnce();
     loop_rate.sleep();
-  }  
-  
+  }
+
 // // =======
 //   ROS_INFO("Publishing waypoint on namespace %s: [%f, %f, %f].",
 //            nh.getNamespace().c_str(),
 //            desired_position.x(),
 //            desired_position.y(),
 //            desired_position.z());
-// 
+//
 //   trajectory_pub.publish(trajectory_msg);
 // >>>>>>> c4de36092f489c46c9cb056765d0ef5c7919919a
 

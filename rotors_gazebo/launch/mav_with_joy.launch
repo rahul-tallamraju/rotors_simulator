@@ -26,11 +26,11 @@
     <node name="joy_node" pkg="joy" type="joy_node" />
     <node name="rotors_joy_interface" pkg="rotors_joy_interface" type="rotors_joy_interface" >
     <param name="axis_roll_" value="3" type="int" />
-    <param name="axis_pitch_" value="4" type="int" /> 
-    <param name="axis_thrust_" value="1" type="int" /> 
-    <param name="axis_yaw_" value="0" type="int" /> 
-    <param name="button_yaw_left_" value="4" type="int" /> 
-    <param name="button_yaw_right_" value="5" type="int" /> 
+    <param name="axis_pitch_" value="4" type="int" />
+    <param name="axis_thrust_" value="1" type="int" />
+    <param name="axis_yaw_" value="0" type="int" />
+    <param name="button_yaw_left_" value="4" type="int" />
+    <param name="button_yaw_right_" value="5" type="int" />
     </node>
     <node name="roll_pitch_yawrate_thrust_controller_node" pkg="rotors_control" type="roll_pitch_yawrate_thrust_controller_node" output="screen">
       <rosparam
