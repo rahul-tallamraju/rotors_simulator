@@ -69,13 +69,13 @@
     </light>
 
 
-    <include>
-      <name>ground_texture</name>
+    <!-- <include>
+      <name>ground_texture</name> -->
       <!-- <uri>model://custom_ground_plane</uri> -->
       <!-- <uri>model://asphalt_plane</uri> -->
-      <uri>model://yosemite</uri>
+      <!-- <uri>model://yosemite</uri> -->
       <!-- <uri>model://vrc_heightmap_1</uri> -->
-    </include>
+    <!-- </include>  -->
 
     <include>
        <uri>model://ground_plane</uri>
