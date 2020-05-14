@@ -15,8 +15,29 @@
     <skin>
       <filename>walk.dae</filename>
     </skin>
+
     <animation name="walking">
       <filename>walk.dae</filename>
+      <interpolate_x>true</interpolate_x>
+    </animation>
+
+    <animation name="moonwalking">
+      <filename>moonwalk.dae</filename>
+      <interpolate_x>true</interpolate_x>
+    </animation>
+
+    <animation name="running">
+      <filename>run.dae</filename>
+      <interpolate_x>true</interpolate_x>
+    </animation>
+    
+    <animation name="talking">
+      <filename>talk_a.dae</filename>
+      <interpolate_x>true</interpolate_x>
+    </animation>
+
+    <animation name="talking_b">
+      <filename>talk_b.dae</filename>
       <interpolate_x>true</interpolate_x>
     </animation>
 
@@ -69,17 +90,17 @@
     </light>
 
 
-    <!-- <include>
-      <name>ground_texture</name> -->
+   <include>
+      <name>ground_texture</name> 
       <!-- <uri>model://custom_ground_plane</uri> -->
-      <!-- <uri>model://asphalt_plane</uri> -->
+      <uri>model://asphalt_plane</uri>
       <!-- <uri>model://yosemite</uri> -->
       <!-- <uri>model://vrc_heightmap_1</uri> -->
-    <!-- </include>  -->
+   </include>  
 
-    <include>
+    <!-- <include>
        <uri>model://ground_plane</uri>
-    </include>
+    </include> -->
 
     <!-- <include>
       <name>barrel_110l</name>
